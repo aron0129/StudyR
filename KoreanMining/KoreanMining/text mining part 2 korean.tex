@@ -1,0 +1,223 @@
+#volcano plot
+
+# A  display of the volcano
+x <- 10*(1:nrow(volcano))
+y <- 10*(1:ncol(volcano))
+image(x, y, volcano, col = terrain.colors(100), axes = FALSE)
+contour(x, y, volcano, levels = seq(90, 200, by = 5),
+        add = TRUE, col = "peru")
+axis(1, at = seq(100, 800, by = 100))
+axis(2, at = seq(100, 600, by = 100))
+box()
+title(main = "Big Island Volcano", font.main = 4)
+
+
+##################################################################
+#example 4
+#ÇÑ±Û ÀÎ½Ä textmining
+
+#installing a Java version
+#https://www.java.com/en/download/
+Sys.setenv(JAVA_HOME='C:\\Program Files\\Java\\jre1.8.0_131') # for 64-bit version
+#Sys.setenv(JAVA_HOME='C:\\Program Files (x86)\\Java\\jre7') # for 32-bit version
+#ÄÄÇ»ÅÍ>¼Ó¼º¿¡¼­ ½Ã½ºÅÛ Á¾·ù È®ÀÎ
+#JAVE °ü·Ã readme file ÀÖ´Â °÷À¸·Î ÁöÁ¤
+
+
+#change the system environment
+
+install.packages('rJava')
+install.packages('withr')
+
+library(rJava)
+
+
+
+
+
+
+
+
+
+
+
+install.packages("tidyverse")
+
+install.packages("C:\\Users\\HanSB\\Dropbox\\Documents\\°­ÀÇ\\#»çÈ¸°úÇĞÅë°èºĞ¼® 1\\2020-1ÇĞ±â\\°­ÀÇ³ëÆ®\\lec 7\\text mining\\KoreanMining\\NLP4kec_1.4.0.zip", repos = NULL)
+
+
+
+
+#repos=NULL:
+#Can be NULL to install from local files
+
+
+#install.packages("RColorBrewer")
+
+# import
+library(tidyverse) # µ¥ÀÌÅÍ ÀüÃ³¸®(stringr)¿Í ±×·¡ÇÁ(ggplot2)
+library(rJava) # NLP4kec »ç¿ë ¸ñÀû
+library(NLP4kec) # ÀÚ¿¬¾î Ã³¸®
+library(wordcloud) # ¿öµåÅ¬¶ó¿ìµå
+
+library(rjson)
+library(plyr)
+library(tm)
+library(ggplot2)
+library(RColorBrewer)
+
+
+library(readxl) #read excel file
+
+
+data <- read_excel(path = "C:\\Users\\HanSB\\Dropbox\\Documents\\°­ÀÇ\\#»çÈ¸°úÇĞÅë°èºĞ¼® 1\\2020-1ÇĞ±â\\°­ÀÇ³ëÆ®\\lec 7\\text mining\\KoreanMining\\sample.xlsx",
+                   sheet = "Sheet1",
+                   col_names = FALSE)
+
+
+
+
+# ¹®ÀÚ¿­ ÇÕÄ¡±â
+sentence <- ""
+for(i in 1:nrow(data)){
+  sentence <- paste(sentence, data[i,1])
+}
+
+# ÇÑ±Û Á¦¿Ü ¹®ÀÚ »èÁ¦
+sentence <- sentence %>% stringr::str_remove_all(pattern = "[^°¡-ÆR]")
+
+
+
+# ´Ü¾î ±¸ºĞ
+data2 <- NLP4kec::r_parser_r(contentVector = sentence, language = "ko")
+
+
+# ¸®½ºÆ® ÇüÅÂ·Î ³ª´©±â
+data3 <- strsplit(data2, split=" ")
+
+# Å×ÀÌºíÈ­
+
+
+data3<-ifelse(data3=='ÇöÁø','¼­ÇöÁø',data3)
+
+
+wordcount  <- table(data3)
+
+
+head(sort(wordcount,decreasing=T),40)
+
+
+
+names.freq<-names(wordcount)
+new.names<-!names.freq%in%c('ÇÏ´Ù','ÀÖ´Ù',
+'°Í','º¸´Ù','µÇ´Ù'
+,'ÁÖ´Ù','¾Ê´Ù','ÁÁ´Ù','¼ö','¶§','Áß',
+'¸¹´Ù','¾ø´Ù','¹Ş´Ù','°°´Ù','Áö´Ù','¿À´Ù')
+show.id<-which(new.names)
+
+nw_wordFreq.trim<-(wordcount)[show.id]
+
+
+head(sort(nw_wordFreq.trim,decreasing=T),40)
+
+
+
+names.freq<-names(nw_wordFreq.trim)
+new.names<-!names.freq%in%c('¾Ë´Ù','´ëÇÏ´Ù',
+'¶§¹®','º¸ÀÌ´Ù','¸ÂÃß´Ù','°¡´Ù','±è','ÇÕ',
+'¾¾')
+show.id<-which(new.names)
+
+nw_wordFreq.trim<-(nw_wordFreq.trim)[show.id]
+
+
+
+
+pal <- brewer.pal(8, "Accent")
+
+
+wordcloud(names(nw_wordFreq.trim), freq=nw_wordFreq.trim,
+min.freq=20, random.order=F, rot.per=0.1, colors=pal)
+
+
+##########################################
+
+
+####
+#example 5
+##
+library(pdftools)
+
+setwd('C:\\Users\\HanSB\\Dropbox\\Documents\\°­ÀÇ\\#»çÈ¸°úÇĞÅë°èºĞ¼® 1\\2020-1ÇĞ±â\\°­ÀÇ³ëÆ®\\lec 7\\text mining\\KoreanMining\\ÇÑ±Û¹®¼­')
+
+
+(file.names <- list.files(pattern = "pdf$"))
+#create a vector of PDF file names
+#pdf_text: ¹®Àå ¼±ÅÃ
+
+#list ·Î º¯È¯ÇÏ¿© ÀúÀåµÊ
+(pages <- lapply(file.names, pdf_text))
+
+pp<-length(pages[[1]])
+
+sentence <- ""
+for(jj in 1:pp){
+  sentence <- paste(sentence, pages[[1]][jj])
+}
+
+# ÇÑ±Û Á¦¿Ü ¹®ÀÚ »èÁ¦
+sentence <- sentence %>% stringr::str_remove_all(pattern = "[^°¡-ÆR]")
+
+
+
+# ´Ü¾î ±¸ºĞ
+data2 <- NLP4kec::r_parser_r(contentVector = sentence, language = "ko")
+
+
+# ¸®½ºÆ® ÇüÅÂ·Î ³ª´©±â
+data3 <- strsplit(data2, split=" ")
+
+
+
+
+
+wordcount  <- table(data3)
+
+
+head(sort(wordcount,decreasing=T),40)
+
+
+
+names.freq<-names(wordcount)
+new.names<-!names.freq%in%c('ÀÖ´Ù','¼ö','ÈÄ','¾Ê´Ù')
+show.id<-which(new.names)
+
+nw_wordFreq.trim<-(wordcount)[show.id]
+
+
+head(sort(nw_wordFreq.trim,decreasing=T),40)
+
+
+
+
+pal <- brewer.pal(8, "Accent")
+
+
+wordcloud(names(nw_wordFreq.trim), freq=nw_wordFreq.trim,
+min.freq=20, random.order=F, rot.per=0.1, colors=pal)
+
+
+install.packages('wordcloud2')
+
+
+library(wordcloud2)
+
+#create html file
+wordcloud2(nw_wordFreq.trim,
+                       color = "random-light",
+                       fontFamily = "NanumGothic")
+
+
+
+
+#####################################

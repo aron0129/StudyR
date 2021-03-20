@@ -21,7 +21,7 @@ title(main = "Big Island Volcano", font.main = 4)
 
 #installing a Java version
 #https://www.java.com/en/download/
-Sys.setenv(JAVA_HOME='C:\\Program Files\\Java\\jre1.8.0_131') # for 64-bit version
+Sys.setenv(JAVA_HOME='Java\\jre1.8.0_131') # for 64-bit version
 #Sys.setenv(JAVA_HOME='C:\\Program Files (x86)\\Java\\jre7') # for 32-bit version
 #컴퓨터>속성에서 시스템 종류 확인
 #JAVE 관련 readme file 있는 곳으로 지정
@@ -38,7 +38,7 @@ library(rJava)
 
 install.packages("tidyverse")
 
-install.packages("C:\\Users\\minji\\Desktop\\3학년1학기\\다변량1\\KoreanMining\\KoreanMining\\NLP4kec_1.4.0.zip",repos=NULL)
+install.packages("\\KoreanMining\\NLP4kec_1.4.0.zip",repos=NULL)
 
 
 
@@ -65,7 +65,7 @@ library(RColorBrewer)
 library(readxl) #read excel file
 
 
-data <- read_excel(path = "C:\\Users\\minji\\Desktop\\3학년1학기\\다변량1\\KoreanMining\\KoreanMining\\sample.xlsx",
+data <- read_excel(path = "\\KoreanMining\\KoreanMining\\sample.xlsx",
                    sheet = "Sheet1",
                    col_names = FALSE)
 
